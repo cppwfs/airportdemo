@@ -1,0 +1,87 @@
+@(airports: List[Airport])
+
+
+<html>
+<head>
+<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+<style type="text/css">
+html {
+	height: 100%
+}
+
+body {
+	height: 100%;
+	margin: 0;
+	padding: 0
+}
+
+#map_canvas {
+	height: 100%
+}
+</style>
+<script type="text/javascript"
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxATMFjiQrCPdsyHAt4ltzTbO2DJSn9Kw&sensor=false">
+    </script>
+<script type="text/javascript">
+
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(33.397, -84.4281),
+          zoom: 3,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        var image = new google.maps.MarkerImage('assets/images/airport.png',
+      // This marker is 20 pixels wide by 32 pixels tall.
+      new google.maps.Size(20, 32),
+      // The origin for this image is 0,0.
+      new google.maps.Point(0,0),
+      // The anchor for this image is the base of the flagpole at 0,32.
+      new google.maps.Point(10, 16));
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+        var infowindow = new google.maps.InfoWindow({
+            content: "hi"
+        })
+        var problemimage = new google.maps.MarkerImage('assets/images/airportproblem.png',
+        	      // This marker is 20 pixels wide by 32 pixels tall.
+        	      new google.maps.Size(20, 32),
+        	      // The origin for this image is 0,0.
+        	      new google.maps.Point(0,0),
+        	      // The anchor for this image is the base of the flagpole at 0,32.
+        	      new google.maps.Point(10, 16));
+        	        var map = new google.maps.Map(document.getElementById("map_canvas"),
+        	            mapOptions);
+        	        var infowindow = new google.maps.InfoWindow({
+        	            content: "hi"
+        	        })
+        var displayImage;
+        @for(airport <- airports) {  
+        	if('@airport.delay'==='false'){
+        		displayImage=image;
+        	}
+        	else{
+        		displayImage=problemimage;
+        	}
+        	
+        var marker = new google.maps.Marker({
+            map: map,
+            position:  new google.maps.LatLng(@airport.latitude, @airport.longitude),
+            draggable:false,icon:displayImage,
+            content: "@airport.status",
+    		animation: google.maps.Animation.DROP, title:"@airport.status"});
+        
+        	;
+        google.maps.event.addListener(marker, 'click', function() {
+        	infowindow.setContent("this.@Html(airport.status)".substring(5))
+        	infowindow.open(map,this);
+          })
+        } 
+      }
+      
+    </script>
+
+</head>
+<body onload="initialize()">
+	<div id="map_canvas" style="width: 75%; height: 75%"></div>
+</body>

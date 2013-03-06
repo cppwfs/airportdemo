@@ -1,0 +1,71 @@
+@(message: String)
+
+@main("Welcome to Play 2.0") {
+    @play20.welcome(message, style = "Java")
+    
+<html>
+  <head>
+      <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <style type="text/css">
+      html { height: 100% }
+      body { height: 100%; margin: 0; padding: 0 }
+      #map_canvas { height: 100% }
+    </style>
+    <script type="text/javascript"
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxATMFjiQrCPdsyHAt4ltzTbO2DJSn9Kw&sensor=false">
+    </script>
+ <script type="text/javascript">
+      function initialize() {
+        var mapOptions = {
+          center: new google.maps.LatLng(-34.397, 150.644),
+          zoom: 8,
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        
+        var image = new google.maps.MarkerImage('assets/images/airport.png',
+      // This marker is 20 pixels wide by 32 pixels tall.
+      new google.maps.Size(20, 32),
+      // The origin for this image is 0,0.
+      new google.maps.Point(0,0),
+      // The anchor for this image is the base of the flagpole at 0,32.
+      new google.maps.Point(0, 32));
+        var map = new google.maps.Map(document.getElementById("map_canvas"),
+            mapOptions);
+//        var marker = new google.maps.Marker({
+//      		position: new google.maps.LatLng(-34.397, 150.644),map: map,
+//		     draggable:true,icon:image,
+//    animation: google.maps.Animation.DROP, title:"Hello World!"});
+//		var marker2 = new google.maps.Marker({
+//      		position: new google.maps.LatLng(-34.397, 150.844),map: map,
+//		      title:"Hello World!"});
+        var geocoder = new google.maps.Geocoder();
+        var address = 'Lake Panasoffkee, FL, United States';
+        geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        map.setCenter(results[0].geometry.location);
+        var marker = new google.maps.Marker({
+            map: map,
+            position: results[0].geometry.location,
+            draggable:true,icon:image,
+    		animation: google.maps.Animation.DROP, title:"Hello World!"});
+    		for (var i=0;i<10;i++)
+			{ 
+				marker = new google.maps.Marker({
+           			map: map,
+            		position: new google.maps.LatLng(28.7556+(i/10), -82.0950),
+            		draggable:true,icon:image,
+    				animation: google.maps.Animation.DROP, title:"Hello World!"});
+			}
+        } else {
+        alert("Geocode was not successful for the following reason: " + status);
+      }
+    });
+
+      }
+    </script>
+
+  </head>
+  <body onload="initialize()">
+    <div id="map_canvas" style="width:50%; height:70%"></div>
+  </body>
+}
