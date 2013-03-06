@@ -45,7 +45,7 @@ public class Airports extends Controller {
 			mgr = new CacheManager("/Users/glennrenfro/Documents/workspace-sts-2.9.2.RELEASE/SIEhCacheTestApp/configs/ehcache-dist.xml" );
 		}
 		Cache c = mgr.getCache("airports_cache");
-		
+
 
 		List<String> airports = c.getKeys();
 		List<Airport>result = new ArrayList<Airport>();
@@ -63,6 +63,10 @@ public class Airports extends Controller {
 			airport.state = tok.nextToken();
 			airport.delay = getDelayStatus(mgr,airport.code);
 			airport.status = getStatus(mgr,airport.code);
+			if(airport.status == null){
+				airport.status = "Not Available";
+			}
+
 			System.out.println("*******************************************"+airport.delay+"*****");
 			if(tok.hasMoreTokens()){
 				airport.latitude=Float.valueOf(tok.nextToken()).floatValue();
